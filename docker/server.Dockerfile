@@ -11,7 +11,7 @@ COPY client /app/client/
 COPY static /app/static/
 
 RUN ./cp2static.sh
-RUN yarn dev
+RUN yarn prod
 
 COPY templates /app/templates/
 RUN yarn md
@@ -36,4 +36,4 @@ COPY variants.ini /app/
 
 EXPOSE 8080
 
-CMD ["python", "server/server.py", "-a"]
+CMD ["python", "server/server.py"]
