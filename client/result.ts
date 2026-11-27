@@ -140,6 +140,8 @@ export function result(
                     break;
                 case 'duck':
                 case 'fogofwar':
+                case 'suntzu':
+                case 'laotzu':
                     text = _('King captured');
                     break;
                 case 'ataxx':

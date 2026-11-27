@@ -50,6 +50,8 @@ NO_PUZZLE_VARIANTS = (
     "cannonshogi",
     "bughouse",
     "fogofwar",
+    "suntzu",
+    "laotzu",
     "supply",
     "makbug",
     "shoshogi",

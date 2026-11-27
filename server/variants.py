@@ -35,6 +35,7 @@ class Variant:
     rating_enabled: bool = True
     hidden_info: bool = False
     hidden_info_mode: HiddenInfoMode = "none"
+    drops_require_visibility: bool = False
     base_variant: str = ""
     show_promoted: bool = False
     legal_moves_need_history: bool = False
@@ -66,6 +67,7 @@ class CataloguedServerVariant:
     rating_enabled: bool = False
     hidden_info: bool = False
     hidden_info_mode: HiddenInfoMode = "none"
+    drops_require_visibility: bool = False
     base_variant: str = ""
     show_promoted: bool = False
     legal_moves_need_history: bool = False
@@ -98,6 +100,7 @@ class ServerVariants(Enum):
         self.rating_enabled = variant.rating_enabled
         self.hidden_info = variant.hidden_info
         self.hidden_info_mode = variant.hidden_info_mode
+        self.drops_require_visibility = variant.drops_require_visibility
         self.base_variant = variant.base_variant
         self.show_promoted = variant.show_promoted
         self.legal_moves_need_history = variant.legal_moves_need_history
@@ -128,6 +131,14 @@ class ServerVariants(Enum):
     DUCK = Variant("U", "duck", _("Duck Chess"), "🦆", move_encoding=encode_move_duck, move_decoding=decode_move_duck)  # fmt: skip
     ALICE = Variant("Y", "alice", _("Alice Chess"), "👧")
     FOGOFWAR = Variant("Q", "fogofwar", _("Fog of War"), "🌫", hidden_info=True, hidden_info_mode="fog")  # fmt: skip
+    # Plain (non-random) pairings exist only so every "...960" variant has the
+    # base uci_variant registered too (see get_server_variant/NO_VARIANTS);
+    # the real-world variants are always double Fischer random and only the
+    # 960 forms are offered in the lobby.
+    SUNTZU = Variant("‡", "suntzu", _("Sun Tzu"), "🗡", hidden_info=True, hidden_info_mode="fog")  # fmt: skip
+    SUNTZU960 = Variant("‡", "suntzu", _("Sun Tzu"), "🗡", chess960=True, hidden_info=True, hidden_info_mode="fog")  # fmt: skip
+    LAOTZU = Variant("¤", "laotzu", _("Lao Tzu"), "☯", hidden_info=True, hidden_info_mode="fog", drops_require_visibility=True)  # fmt: skip
+    LAOTZU960 = Variant("¤", "laotzu", _("Lao Tzu"), "☯", chess960=True, hidden_info=True, hidden_info_mode="fog", drops_require_visibility=True)  # fmt: skip
 
     MAKRUK = Variant("m", "makruk", _("Makruk"), "Q")
     MAKRUKHOUSE = Variant("Ł", "makrukhouse", _("Makrukhouse"), "Q")
@@ -213,6 +224,10 @@ NO_VARIANTS: tuple[ServerVariants, ...] = (
     ServerVariants.SHINOBI,
     ServerVariants.MAKRUKHOUSE,
     ServerVariants.XIANGQIHOUSE,
+    # Sun Tzu and Lao Tzu are always double Fischer random; only the 960 forms
+    # (SUNTZU960/LAOTZU960) are offered in the lobby.
+    ServerVariants.SUNTZU,
+    ServerVariants.LAOTZU,
 )
 
 TWO_BOARD_VARIANTS: tuple[ServerVariants, ...] = tuple(

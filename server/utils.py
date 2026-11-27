@@ -619,6 +619,12 @@ async def import_game(request):
     elif variant == "fischerandom":
         variant = "chess"
         chess960 = True
+    elif variant == "sun tzu":
+        variant = "suntzu"
+        chess960 = True
+    elif variant == "lao tzu":
+        variant = "laotzu"
+        chess960 = True
 
     initial_fen = data.get("FEN", "")
     final_fen = data.get("final_fen", "")
@@ -1076,8 +1082,8 @@ async def insert_game_to_db(game, app_state: PychessGlobalAppState):
 
 
 async def publish_game_to_tv(game, app_state: PychessGlobalAppState) -> None:
-    # No corr and Fog of War games to TV
-    if game.persist_to_db and (not game.corr) and (game.variant != "fogofwar"):
+    # No corr and hidden-info (fog of war, Sun Tzu, Lao Tzu, ...) games to TV
+    if game.persist_to_db and (not game.corr) and (not game.server_variant.hidden_info):
         app_state.tv = game.id
         await app_state.lobby.lobby_broadcast(game.tv_game_json)
         game.wplayer.tv = game.id
@@ -1260,6 +1266,28 @@ async def play_move(
         if not user.bot and not invalid_move and move not in game.legal_moves:
             log.warning(
                 "Rejecting illegal human move in %s by %s (move=%s ply=%s turn=%s fen=%s)",
+                gameId,
+                user.username,
+                move,
+                ply,
+                cur_player.username,
+                game.board.fen,
+            )
+            await send_human_resync("illegal-human-move")
+            return
+
+        # Lao Tzu chess: a drop is only legal onto a square already visible
+        # through non-drop moves. The engine's own legal-move list (checked
+        # above) has no notion of this restriction, so it is enforced here.
+        if (
+            not user.bot
+            and not invalid_move
+            and game.server_variant.drops_require_visibility
+            and "@" in move
+            and move[2:4] not in game.board.visible_drop_squares()
+        ):
+            log.warning(
+                "Rejecting drop onto non-visible square in %s by %s (move=%s ply=%s turn=%s fen=%s)",
                 gameId,
                 user.username,
                 move,
@@ -1936,8 +1964,8 @@ def corr_games(games):
         {
             "gameId": game.id,
             "variant": game.variant,
-            "fen": DARK_FEN if game.variant == "fogofwar" else game.board.fen,
-            "lastMove": "" if game.variant == "fogofwar" else game.lastmove,
+            "fen": DARK_FEN if game.server_variant.hidden_info else game.board.fen,
+            "lastMove": "" if game.server_variant.hidden_info else game.lastmove,
             "tp": game.turn_player,
             "w": game.wplayer.username,
             "wTitle": game.wplayer.title,
@@ -1959,8 +1987,8 @@ def simul_games(games):
         {
             "gameId": game.id,
             "variant": game.variant,
-            "fen": DARK_FEN if game.variant == "fogofwar" else game.board.fen,
-            "lastMove": "" if game.variant == "fogofwar" else game.lastmove,
+            "fen": DARK_FEN if game.server_variant.hidden_info else game.board.fen,
+            "lastMove": "" if game.server_variant.hidden_info else game.lastmove,
             "tp": game.turn_player,
             "w": game.wplayer.username,
             "wTitle": game.wplayer.title,

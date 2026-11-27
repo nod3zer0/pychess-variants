@@ -178,6 +178,11 @@ class Game:
         self.wplayer: User = wplayer
         self.bplayer: User = bplayer
 
+        if variant in ("suntzu", "laotzu"):
+            # Sun Tzu and Lao Tzu are always double Fischer random; there is
+            # no non-random form for a client to opt out of.
+            chess960 = True
+
         catalogued_casual = is_catalogued_variant(variant)
         if create and catalogued_casual and get_server_variant(variant, False).replay_only:
             raise ValueError("This user-defined variant is available for historical replay only.")
@@ -325,7 +330,7 @@ class Game:
 
         self.id: str = gameId
 
-        self.fow: bool = variant == "fogofwar"
+        self.fow: bool = self.server_variant.hidden_info_mode == "fog"
         self.jieqi: bool = self.variant == "jieqi"
 
         # Jieqi captures must be tracked per side; the opponent
@@ -2143,7 +2148,13 @@ class Game:
             crosstable = self.crosstable if self.status > STARTED else ""
 
         if self.fow and self.status <= STARTED:
-            steps = get_fog_steps(steps, persp_color)
+            steps = get_fog_steps(
+                steps,
+                persp_color,
+                self.variant,
+                bool(self.chess960),
+                self.server_variant.drops_require_visibility,
+            )
             fen = steps[-1]["fen"]
             if (persp_color is None) or (persp_color == self.board.color):
                 lastmove = ""
@@ -2326,13 +2337,21 @@ class Game:
         self.messages.append(chat_message)
 
 
-def get_fog_steps(steps: Sequence[GameStep], persp_color: int | None) -> list[GameStep]:
+def get_fog_steps(
+    steps: Sequence[GameStep],
+    persp_color: int | None,
+    variant: str = "fogofwar",
+    chess960: bool = False,
+    drops_require_visibility: bool = False,
+) -> list[GameStep]:
     if persp_color is None:
         return [{"fen": DARK_FEN} for step in steps]
     else:
         return [
             {
-                "fen": get_fog_fen(step["fen"], persp_color),
+                "fen": get_fog_fen(
+                    step["fen"], persp_color, variant, chess960, drops_require_visibility
+                ),
                 "san": "?",
                 "turnColor": step["turnColor"],
             }
