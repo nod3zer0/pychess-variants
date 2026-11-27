@@ -93,7 +93,7 @@ from ws_structs import LOBBY_TYPED_DECODERS
 
 log = logging.getLogger(__name__)
 
-UNSUPPORTED_FSF_AI_VARIANTS = ("fogofwar", "jieqi")
+UNSUPPORTED_FSF_AI_VARIANTS = ("fogofwar", "suntzu", "laotzu", "jieqi")
 BOT_LOBBY_ACTION_MESSAGE = "BOT accounts cannot create or join lobby games."
 BOT_UNSUPPORTED_VARIANT_MESSAGE = "This BOT does not support the selected variant."
 CATALOGUED_CASUAL_ONLY_MESSAGE = (

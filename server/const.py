@@ -245,6 +245,8 @@ VARIANT_960_TO_PGN = {
     "makruk": "Makruk",
     "placement": "Placement",
     "grand": "Grand",
+    "suntzu": "Sun Tzu",
+    "laotzu": "Lao Tzu",
 }
 
 CATEGORIES = {
@@ -271,6 +273,8 @@ CATEGORIES = {
         "duck",
         "alice",
         "fogofwar",
+        "suntzu960",
+        "laotzu960",
     ),
     "fairy": (
         "shatranj",

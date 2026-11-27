@@ -33,6 +33,9 @@ services:
       - 8080:8080
     environment:
       - MONGO_HOST=mongodb://${MONGO_ADMIN_USER:-admin}:${MONGO_ADMIN_PASS:-pass}@mongodb:27017
+      - URI=${URI:-http://127.0.0.1:8080}
+      - PROD=${PROD:-false}
+      - CLIENT_IP_MODE=${CLIENT_IP_MODE:-direct}
     depends_on:
       - "mongodb"
 

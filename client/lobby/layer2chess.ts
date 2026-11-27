@@ -16,6 +16,8 @@ export function layer2chess(lobbyCtrl: LobbyController, containerId: string, sho
     const duck = VARIANTS['duck'];
     const alice = VARIANTS['alice'];
     const fogofwar = VARIANTS['fogofwar'];
+    const suntzu = VARIANTS['suntzu'];
+    const laotzu = VARIANTS['laotzu'];
     const threecheck = VARIANTS['3check'];
     const antichess = VARIANTS['antichess'];
     const racingkings = VARIANTS['racingkings'];
@@ -163,6 +165,26 @@ export function layer2chess(lobbyCtrl: LobbyController, containerId: string, sho
                     h('div.variant-title-l2', [
                         h('div.icon', { attrs: { 'data-icon': fogofwar.icon() } }),
                         h('h3', VARIANTS['fogofwar'].displayName()),
+                    ]),
+                ],
+            ),
+            h(
+                'button.layer-2-category',
+                { on: { click: () => layer3variant('layer2chesscont', lobbyCtrl, 'suntzu') } },
+                [
+                    h('div.variant-title-l2', [
+                        h('div.icon', { attrs: { 'data-icon': suntzu.icon() } }),
+                        h('h3', VARIANTS['suntzu'].displayName()),
+                    ]),
+                ],
+            ),
+            h(
+                'button.layer-2-category',
+                { on: { click: () => layer3variant('layer2chesscont', lobbyCtrl, 'laotzu') } },
+                [
+                    h('div.variant-title-l2', [
+                        h('div.icon', { attrs: { 'data-icon': laotzu.icon() } }),
+                        h('h3', VARIANTS['laotzu'].displayName()),
                     ]),
                 ],
             ),

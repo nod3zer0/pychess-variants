@@ -364,6 +364,26 @@ castlingKingPiece = k
 #extinctionValue = loss
 #extinctionPieceTypes = k
 
+[suntzu:chess]
+king = -
+commoner = k
+castlingKingPiece = k
+# extinction rules prevents to get valid moves for fog FENs ceated on server side
+#extinctionValue = loss
+#extinctionPieceTypes = k
+pieceDrops = true
+capturesToHand = true
+
+[laotzu:chess]
+king = -
+commoner = k
+castlingKingPiece = k
+# extinction rules prevents to get valid moves for fog FENs ceated on server side
+#extinctionValue = loss
+#extinctionPieceTypes = k
+pieceDrops = true
+capturesToHand = true
+
 # Hybrid variant of xiangqi and crazyhouse
 [xiangqihouse:xiangqi]
 startFen = rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR[] w - - 0 1

@@ -163,6 +163,10 @@ function proTip(variant: string, chess960: boolean) {
             return _('Kings are much more at risk than in Chess.');
         case 'fogofwar':
             return _('Castling is essential.');
+        case 'suntzu':
+            return _('Holding a piece to drop reveals every empty square to you, even ones your pieces cannot reach.');
+        case 'laotzu':
+            return _('Drops are only allowed on squares you can already see.');
         // fairy
         case 'shatranj':
             return _('Stalemating the opposing king is win.');

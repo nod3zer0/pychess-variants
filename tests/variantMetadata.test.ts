@@ -19,6 +19,13 @@ test('hidden info metadata is set for jieqi', () => {
     expect(VARIANTS.jieqi.hiddenInfoMode).toBe('covered_pieces');
 });
 
+test('hidden info metadata is set for suntzu and laotzu', () => {
+    expect(VARIANTS.suntzu.hiddenInfo).toBe(true);
+    expect(VARIANTS.suntzu.hiddenInfoMode).toBe('fog');
+    expect(VARIANTS.laotzu.hiddenInfo).toBe(true);
+    expect(VARIANTS.laotzu.hiddenInfoMode).toBe('fog');
+});
+
 test('hidden info metadata defaults to none for normal variants', () => {
     expect(VARIANTS.chess.hiddenInfo).toBe(false);
     expect(VARIANTS.chess.hiddenInfoMode).toBe('none');

@@ -1215,6 +1215,44 @@ export const VARIANTS: Record<string, Variant> = {
         rules: { enPassant: true },
     }),
 
+    suntzu: variant({
+        name: 'suntzu',
+        displayName: 'Sun Tzu',
+        tooltip:
+            'Fog of war, crazyhouse-style drops, and a double Fischer random (independent per-side) setup. Drops are allowed on any empty square, including ones you cannot currently see.',
+        startFen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR[] w KQkq - 0 1',
+        hiddenInfo: true,
+        hiddenInfoMode: 'fog',
+        icon: '🗡',
+        boardFamily: 'standard8x8',
+        pieceFamily: 'standard',
+        pieceRow: ['k', 'q', 'r', 'b', 'n', 'p'],
+        pocket: {
+            roles: ['p', 'n', 'b', 'r', 'q'],
+            captureToHand: true,
+        },
+        rules: { enPassant: true },
+    }),
+
+    laotzu: variant({
+        name: 'laotzu',
+        displayName: 'Lao Tzu',
+        tooltip:
+            'Like Sun Tzu chess, but drops are only allowed on squares already visible through your pieces’ normal moves.',
+        startFen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR[] w KQkq - 0 1',
+        hiddenInfo: true,
+        hiddenInfoMode: 'fog',
+        icon: '☯',
+        boardFamily: 'standard8x8',
+        pieceFamily: 'standard',
+        pieceRow: ['k', 'q', 'r', 'b', 'n', 'p'],
+        pocket: {
+            roles: ['p', 'n', 'b', 'r', 'q'],
+            captureToHand: true,
+        },
+        rules: { enPassant: true },
+    }),
+
     makruk: variant({
         name: 'makruk',
         tooltip:
@@ -2183,6 +2221,8 @@ export const noPuzzleVariants = [
     'cannonshogi',
     'bughouse',
     'fogofwar',
+    'suntzu',
+    'laotzu',
     'antichess',
     'horde',
     'supply',
@@ -2194,7 +2234,7 @@ export const noPuzzleVariants = [
 ];
 
 export const twoBoarsVariants = variants.filter(v => VARIANTS[v].twoBoards);
-export const unsupportedAiVariants = ['fogofwar', 'jieqi'];
+export const unsupportedAiVariants = ['fogofwar', 'suntzu', 'laotzu', 'jieqi'];
 
 export const devVariants = ['borderlands', 'cwda', 'makbug', 'supply'];
 export const CATALOGUED_VARIANT_ICON = '☐';
@@ -3151,6 +3191,8 @@ export const variantGroups: { [key: string]: { variants: string[] } } = {
             'duck',
             'alice',
             'fogofwar',
+            'suntzu',
+            'laotzu',
         ],
     },
     makruk: { variants: ['makruk', 'makbug', 'makpong', 'cambodian', 'sittuyin', 'asean'] },
@@ -3336,7 +3378,7 @@ export function moddedVariant(
 }
 
 export function getLastMoveFen(variantName: string, lastMove: string, fen: string): [cg.Orig[] | undefined, string] {
-    return [uci2LastMove(lastMove), variantName === 'fogofwar' ? fogFen(fen) : fen];
+    return [uci2LastMove(lastMove), VARIANTS[variantName]?.hiddenInfoMode === 'fog' ? fogFen(fen) : fen];
 }
 
 // Replace all brick ("*") pieces to be promoted ("*~") to let them CSS style as fog instead of duck

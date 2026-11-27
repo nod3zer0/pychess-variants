@@ -187,7 +187,7 @@ export class AnalysisController extends GameController {
             model.study?.chapter.mode !== 'practice' &&
             !this.variant.twoBoards &&
             !this.variant.hiddenInfo &&
-            !['fogofwar', 'jieqi'].includes(this.variant.name);
+            !['fogofwar', 'suntzu', 'laotzu', 'jieqi'].includes(this.variant.name);
         this.tree = new AnalysisTreeController(this);
         this.analysisExtension = extensionFactory?.(this);
         this.pvHoverPreview = new PvHoverPreview(this.variant);
