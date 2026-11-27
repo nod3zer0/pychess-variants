@@ -672,6 +672,34 @@ chancellor = c`,
     expect(variant.pieceFamily).toBe('capa');
 });
 
+test('catalogued fog-of-war-style (commoner) variants auto-detect the standard piece family', () => {
+    const meta: CataloguedVariantClientDocument = {
+        name: 'testcataloguedfow',
+        displayName: 'Test Catalogued FoW',
+        tooltip: 'Catalogued variant',
+        ini: `[testcataloguedfow:chess]
+king = -
+commoner = k
+castlingKingPiece = k
+extinctionValue = loss
+extinctionPieceTypes = k
+pieceDrops = true
+capturesToHand = true`,
+        baseVariant: 'chess',
+        startFen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR[] w KQkq - 0 1',
+        width: 8,
+        height: 8,
+        pieces: ['k', 'q', 'r', 'b', 'n', 'p'],
+        kingRoles: [],
+        hiddenInfo: true,
+        hiddenInfoMode: 'fog',
+    };
+    const variant = register(meta);
+
+    expect(cataloguedCompatiblePieceFamily(meta, { ignoreCustomPieceSet: true })).toBe('standard');
+    expect(variant.pieceFamily).toBe('standard');
+});
+
 test('catalogued piece family override bypasses conservative identity detection', () => {
     const meta: CataloguedVariantClientDocument = {
         name: 'testfsfthreekingsstandard',
